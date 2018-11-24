@@ -1,0 +1,35 @@
+language: julia
+os:
+  - linux
+julia:
+  - 0.6
+notifications:
+  email: false
+git:
+  depth: 99999999
+cache:
+  directories:
+    - downloads
+env:
+  global:
+    - BINARYBUILDER_DOWNLOADS_CACHE=downloads
+    - BINARYBUILDER_ROOTFS_DIR=rootfs
+sudo: required
+before_script:
+  - julia -e 'Pkg.clone("https://github.com/JuliaPackaging/BinaryProvider.jl")'
+  - julia -e 'Pkg.clone("https://github.com/JuliaPackaging/BinaryBuilder.jl"); Pkg.build()'
+script:
+  - julia build_tarballs.jl
+deploy:
+  provider: releases
+  api_key:
+    # Note: This api_key is only valid for eschnett/QDBuilder.jl; you
+    # need to make your own:
+    # https://docs.travis-ci.com/user/deployment/releases/
+    secure: Ypf6KUyfMbg7ko+MvulqIWh7QA3IZep6uAGSc3hSoTUjjB2G2eYJzKRdI07SB2DVwNniDUHPIWzJ1LgzWpgnYwmN68NodqeHOqIX6rgC6+6aNzMJ+IclUXumfO2eERE0LsSX4IuQjd+tBS+8xs4rI8phkrnAm4oHO30Yif0l9so43jOuugaTpM1Kp5T0Bdg0NGsR1tO0DunkYH3aNp3M3R9pSyWR+cRw0URNYaioodlXeEOvnhS7d3NoolZbb+4XGRehWHr4HFF+qO768mxj/dTsvOMfhdQ///HynEU4fbMuFAwp023gVO9vcYoxBrrmbu1yGDIsj/RGvTP/sz2unWTF0wJ2dllfn9KsSxi/LKc5C3hchSam1AFIZ70GhYMZB6fXbmp0Vs/NxHU7LFPJxvdbEkf0zmETwxHPAWfPEk7ZjcB4uz3hdbenbTvQ7gM8vNUa9PToOquRhh0OsPl2oQwooKJm39l+u5ZuNEcE4exsoRzPGVs7ePUqaPq1882EQfHVfXeW8Z943ld++UmFNeYTEqJ4i/RjDjzMuB8GxdwYClEVr/M3IBu9tcYRQcP3Wq0qqw5kwRyN6sph9QObodpbS1lREb++c/HqO0swH66Qj6MCj81xYcsziYv7nFm6P+H4zSe7poaXHihCOoh5OeXmqjjhav2mxtOX8bgyeOk=
+  file_glob: true
+  file: products/*.tar.gz
+  skip_cleanup: true
+  on:
+    repo: eschnett/QDBuilder.jl
+    tags: true
