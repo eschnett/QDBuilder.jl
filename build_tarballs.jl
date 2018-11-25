@@ -34,7 +34,7 @@ platforms_osx = [
 
 if ENV["TRAVIS_OS_NAME"] == "linux"
     platforms = platforms_linux
-else if ENV["TRAVIS_OS_NAME"] == "osx"
+elseif ENV["TRAVIS_OS_NAME"] == "osx"
     platforms = platforms_osx
 else
     platforms = [platforms_linux; platforms_osx]
@@ -51,4 +51,3 @@ dependencies = [
 
 # Build the tarballs, and possibly a `build.jl` as well.
 build_tarballs(ARGS, name, version, sources, script, platforms, products, dependencies)
-
