@@ -9,7 +9,6 @@ version = v"2.3.22"
 sources = [
     "http://crd.lbl.gov/~dhbailey/mpdist/qd-2.3.22.tar.gz" =>
     "268e89ac68d21bebfba279fec2b82b18686509b020cd9a1868dcaac5e46fef72",
-
 ]
 
 # Bash recipe for building across all platforms
@@ -19,19 +18,27 @@ cd qd-2.3.22
 ./configure --prefix=$prefix --host=$target --enable-shared --disable-static
 make -j2
 make -j2 install
-exit
-
 """
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
-platforms = [
+platforms_linux = [
     Linux(:i686, libc=:glibc),
     Linux(:x86_64, libc=:glibc),
     Linux(:aarch64, libc=:glibc),
-    Linux(:armv7l, libc=:glibc, call_abi=:eabihf)
-    # MacOS(:x86_64)
+    Linux(:armv7l, libc=:glibc, call_abi=:eabihf),
 ]
+platforms_osx = [
+    MacOS(:x86_64),
+]
+
+if ENV["TRAVIS_OS_NAME"] == "linux"
+    platforms = platforms_linux
+else if ENV["TRAVIS_OS_NAME"] == "osx"
+    platforms = platforms_osx
+else
+    platforms = [platforms_linux; platforms_osx]
+end
 
 # The products that we will ensure are always built
 products(prefix) = [
@@ -40,7 +47,6 @@ products(prefix) = [
 
 # Dependencies that must be installed before this package can be built
 dependencies = [
-    
 ]
 
 # Build the tarballs, and possibly a `build.jl` as well.
