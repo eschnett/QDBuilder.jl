@@ -2,6 +2,18 @@ language: julia
 os:
   - linux
   - osx
+env:
+  matrix:
+    - DEFAULT=1                       # dummy setting
+    - BINARYBUILDER_AUTOMATIC_APPLE=1 # install Apple's SDK
+matrix:
+  include:
+    - os: linux
+      env: DEFAULT=1
+    - os: osx
+      # Agree to install Apple's SDK. This is legal because Travis is
+      # running this job on a MacOS platform in this matrix element.
+      env: BINARYBUILDER_AUTOMATIC_APPLE=1
 julia:
   - "1.0"
 notifications:
