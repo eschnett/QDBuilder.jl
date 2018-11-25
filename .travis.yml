@@ -2,10 +2,6 @@ language: julia
 os:
   - linux
   - osx
-env:
-  matrix:
-    - DEFAULT=1                       # dummy setting
-    - BINARYBUILDER_AUTOMATIC_APPLE=1 # install Apple's SDK
 matrix:
   include:
     - os: linux
