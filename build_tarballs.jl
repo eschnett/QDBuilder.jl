@@ -35,6 +35,7 @@ platforms_osx = [
 if ENV["TRAVIS_OS_NAME"] == "linux"
     platforms = platforms_linux
 elseif ENV["TRAVIS_OS_NAME"] == "osx"
+    ENV["BINARYBUILDER_AUTOMATIC_APPLE"] = "1"
     platforms = platforms_osx
 else
     platforms = [platforms_linux; platforms_osx]
