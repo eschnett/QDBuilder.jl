@@ -29,8 +29,8 @@ platforms = [
     Linux(:i686, libc=:glibc),
     Linux(:x86_64, libc=:glibc),
     Linux(:aarch64, libc=:glibc),
-    Linux(:armv7l, libc=:glibc, call_abi=:eabihf),
-    MacOS(:x86_64)
+    Linux(:armv7l, libc=:glibc, call_abi=:eabihf)
+    # MacOS(:x86_64)
 ]
 
 # The products that we will ensure are always built
