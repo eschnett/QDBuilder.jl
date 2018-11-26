@@ -13,28 +13,30 @@ sources = [
 
 # Bash recipe for building across all platforms
 script = raw"""
-cd $WORKSPACE/srcdir
-cd qd-2.3.22
+cd $WORKSPACE/srcdir/qd-*
 ./configure --prefix=$prefix --host=$target --enable-shared --disable-static
-make -j2
-make -j2 install
+make -j${nproc}
+make -j${nproc} install
 """
 
 # These are the platforms we will build for by default, unless further
 # platforms are passed in on the command line
 platforms_linux = [
-    Linux(:i686, libc=:glibc),
-    Linux(:x86_64, libc=:glibc),
     Linux(:aarch64, libc=:glibc),
     Linux(:armv7l, libc=:glibc, call_abi=:eabihf),
+    Linux(:i686, libc=:glibc),
+    Linux(:x86_64, libc=:glibc),
+    Windows(:i686),
+    Windows(:x86_64),
 ]
 platforms_osx = [
     MacOS(:x86_64),
 ]
 
-if ENV["TRAVIS_OS_NAME"] == "linux"
+os = get(ENV, "TRAVIS_OS_NAME", nothing)
+if os == "linux"
     platforms = platforms_linux
-elseif ENV["TRAVIS_OS_NAME"] == "osx"
+elseif os == "osx"
     platforms = platforms_osx
 else
     platforms = [platforms_linux; platforms_osx]
